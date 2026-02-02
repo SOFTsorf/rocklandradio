@@ -1,6 +1,9 @@
 const scrape = require('website-scraper');
-const PuppeteerPlugin = require('website-scraper-puppeteer');
+const PuppeteerPluginRaw = require('website-scraper-puppeteer');
 const path = require('path');
+
+// Fix für den "Constructor"-Fehler: Prüft, wo das Plugin steckt
+const PuppeteerPlugin = PuppeteerPluginRaw.default || PuppeteerPluginRaw;
 
 const url = process.argv[2];
 if (!url) {
@@ -12,6 +15,7 @@ const domain = new URL(url).hostname;
 const outputDir = path.resolve(__dirname, 'clones', domain);
 
 async function startClone() {
+    console.log(`🚀 Starte Klonen von: ${url}`);
     try {
         await scrape({
             urls: [url],
