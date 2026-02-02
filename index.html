@@ -3,121 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ultimate Web Cloner Pro</title>
+    <title>Pro Web Cloner - GitHub Edition</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            background-color: #1e293b;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
-        }
-        h1 { margin-bottom: 1.5rem; color: #38bdf8; }
-        input {
-            width: 80%;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: white;
-            margin-bottom: 1rem;
-        }
-        button {
-            background-color: #38bdf8;
-            color: #0f172a;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover { background-color: #0ea5e9; }
-        #status { margin-top: 1rem; font-size: 0.9rem; color: #94a3b8; }
-        .loader {
-            display: none;
-            margin: 10px auto;
-            border: 4px solid #334155;
-            border-top: 4px solid #38bdf8;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .container { background-color: var(--card); padding: 2.5rem; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 550px; text-align: center; border: 1px solid #334155; }
+        h1 { margin-bottom: 0.5rem; color: var(--primary); font-size: 1.8rem; }
+        p { color: #94a3b8; margin-bottom: 2rem; }
+        .input-group { position: relative; margin-bottom: 1.5rem; }
+        input { width: 100%; padding: 14px; border-radius: 8px; border: 2px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
+        input:focus { outline: none; border-color: var(--primary); }
+        button { background-color: var(--primary); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1rem; transition: opacity 0.3s; }
+        button:hover { opacity: 0.9; }
+        button:disabled { background-color: #475569; cursor: not-allowed; }
+        #status { margin-top: 1.5rem; font-size: 0.85rem; padding: 10px; border-radius: 6px; background: #0f172a; min-height: 20px; }
+        .loader { display: none; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin: 15px auto; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Web Cloner</h1>
-    <p>Geben Sie die URL ein, um das Frontend zu klonen:</p>
-    <input type="url" id="urlInput" placeholder="https://beispiel.de" required>
-    <br>
-    <button onclick="cloneWebsite()">Seite klonen & Download</button>
+    <h1>SiteClone AI</h1>
+    <p>Geklonte Seiten inklusive HTML & Meta-Daten</p>
+    
+    <div class="input-group">
+        <input type="url" id="urlInput" placeholder="https://www.google.com" required>
+    </div>
+    
+    <button id="cloneBtn" onclick="startCloning()">Website jetzt klonen</button>
+    
     <div class="loader" id="loader"></div>
-    <div id="status">Bereit zum Kopieren...</div>
+    <div id="status">Warte auf Eingabe...</div>
 </div>
 
 <script>
-    async function cloneWebsite() {
-        const url = document.getElementById('urlInput').value;
+    async function startCloning() {
+        const urlInput = document.getElementById('urlInput');
+        const btn = document.getElementById('cloneBtn');
         const status = document.getElementById('status');
         const loader = document.getElementById('loader');
-
+        
+        let url = urlInput.value.trim();
         if (!url) {
-            alert("Bitte eine gültige URL eingeben!");
+            updateStatus("❌ Bitte gib eine URL ein!", "#ef4444");
             return;
         }
 
-        status.innerText = "Verbindung wird aufgebaut...";
-        loader.style.display = "block";
+        // URL fixen, falls http fehlt
+        if (!url.startsWith('http')) url = 'https://' + url;
+
+        setLoading(true);
+        updateStatus("⏳ Verbinde mit Proxy und lade Daten...", "#38bdf8");
 
         try {
-            // Wir nutzen AllOrigins als Proxy, um CORS-Sperren zu umgehen
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
-            const response = await fetch(proxyUrl);
-            const data = await response.json();
-
-            if (!data.contents) throw new Error("Inhalt konnte nicht geladen werden.");
-
-            status.innerText = "HTML extrahiert. Erstelle ZIP-Archiv...";
-
-            // ZIP-Datei erstellen
-            const zip = new JSZip();
-            zip.file("index.html", data.contents);
+            // Wir nutzen AllOrigins mit Cache-Bust, um aktuelle Daten zu erzwingen
+            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&_=${Date.now()}`;
             
-            // Info-Datei hinzufügen
-            zip.file("readme.txt", "Geklont mit Web Cloner Pro\nUrsprüngliche URL: " + url);
+            const response = await fetch(proxy);
+            if (!response.ok) throw new Error("Netzwerk-Antwort war nicht ok.");
+            
+            const data = await response.json();
+            
+            if (!data.contents) {
+                throw new Error("Die Seite konnte nicht gelesen werden (CORS oder Schutz).");
+            }
 
-            const content = await zip.generateAsync({type:"blob"});
-            const downloadLink = document.createElement("a");
-            downloadLink.href = URL.createObjectURL(content);
-            downloadLink.download = "website_clone.zip";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
+            updateStatus("📄 HTML empfangen. Verarbeite Assets...", "#38bdf8");
 
-            status.innerText = "Erfolgreich geklont! Checke deine Downloads.";
-        } catch (error) {
-            status.innerText = "Fehler: " + error.message;
-            console.error(error);
+            const zip = new JSZip();
+            const folderName = new URL(url).hostname;
+            
+            // HTML modifizieren (optional: hier könnte man Pfade anpassen)
+            let htmlContent = data.contents;
+            
+            // Basis-Tag einfügen, damit Bilder/CSS von der Original-URL geladen werden
+            const baseTag = `<base href="${url}">`;
+            htmlContent = htmlContent.replace('<head>', '<head>' + baseTag);
+
+            zip.file("index.html", htmlContent);
+            zip.file("clone_info.txt", `Geklont am: ${new Date().toLocaleString()}\nQuelle: ${url}`);
+
+            updateStatus("📦 Erstelle ZIP-Archiv...", "#fbbf24");
+            
+            const zipBlob = await zip.generateAsync({type: "blob"});
+            const downloadUrl = URL.createObjectURL(zipBlob);
+            
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = `clone_${folderName}.zip`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(downloadUrl);
+
+            updateStatus("✅ Download gestartet!", "#22c55e");
+        } catch (err) {
+            console.error("Cloning Error:", err);
+            updateStatus("❌ Fehler: " + err.message, "#ef4444");
         } finally {
-            loader.style.display = "none";
+            setLoading(false);
         }
+    }
+
+    function updateStatus(msg, color) {
+        const s = document.getElementById('status');
+        s.innerText = msg;
+        s.style.color = color || "#94a3b8";
+    }
+
+    function setLoading(isLoading) {
+        const btn = document.getElementById('cloneBtn');
+        const loader = document.getElementById('loader');
+        btn.disabled = isLoading;
+        loader.style.display = isLoading ? "block" : "none";
     }
 </script>
 
