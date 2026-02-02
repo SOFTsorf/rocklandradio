@@ -3,36 +3,35 @@ on:
   workflow_dispatch:
     inputs:
       target_url:
-        description: 'Welche URL soll komplett geklont werden?'
+        description: 'URL zum Klonen'
         required: true
         default: 'https://www.rocklandradio.de'
 
 jobs:
-  deep-clone:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Code auschecken
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Node.js vorbereiten
+      - name: Install Node
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      - name: Scraper-Tools installieren
+      - name: Install Dependencies
         run: |
           npm install website-scraper website-scraper-puppeteer puppeteer
-          # Installiert notwendige Browser-Abhängigkeiten für Linux
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-      - name: Klon-Vorgang ausführen
+      - name: Run Scraper
         run: node scraper.js "${{ github.event.inputs.target_url }}"
 
-      - name: Dateien zurück ins Repo speichern
+      - name: Save to Repo
         run: |
-          git config --global user.name "SiteCloner-Bot"
+          git config --global user.name "CloneBot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt"
+          git commit -m "Site geklont: ${{ github.event.inputs.target_url }}"
           git push
