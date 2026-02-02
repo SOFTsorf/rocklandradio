@@ -21,7 +21,9 @@ jobs:
 
       - name: Install Tools
         run: |
-          # Wir installieren die Pakete ohne feste Versionsnummer, um ETARGET Fehler zu vermeiden
+          # Wir löschen eine eventuell kaputte package.json im Arbeitsverzeichnis
+          rm -f package.json
+          # Wir installieren alles frisch ohne Versionsvorgabe
           npm install website-scraper website-scraper-puppeteer puppeteer
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
@@ -34,5 +36,5 @@ jobs:
           git config --global user.name "CloneBot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt" || echo "Keine Änderungen"
+          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt" || echo "Nichts neu"
           git push
