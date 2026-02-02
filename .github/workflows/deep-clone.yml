@@ -3,12 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       target_url:
-        description: 'URL zum Klonen'
+        description: 'URL der Seite'
         required: true
         default: 'https://www.rocklandradio.de'
 
 jobs:
-  clone:
+  cloning:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,10 +24,10 @@ jobs:
           sudo apt-get install -y google-chrome-stable
       - name: Run
         run: node scraper.js "${{ github.event.inputs.target_url }}"
-      - name: Push
+      - name: Save
         run: |
           git config --global user.name "Bot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Klon fertig" || echo "Keine Änderungen"
+          git commit -m "Klon fertig" || echo "Nichts neu"
           git push
