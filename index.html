@@ -1,100 +1,89 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
-<title>Wird geladen...</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:system-ui,-apple-system,sans-serif;
-  background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff
-}
-.loader{text-align:center;padding:2rem}
-.spinner{
-  width:60px;
-  height:60px;
-  margin:0 auto 1.5rem;
-  border:4px solid rgba(255,255,255,.3);
-  border-top:4px solid #fff;
-  border-radius:50%;
-  animation:spin 1s linear infinite
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-h1{font-size:1.5rem;font-weight:600;margin-bottom:.5rem;opacity:.95}
-p{font-size:.95rem;opacity:.85}
-noscript{
-  position:fixed;
-  top:0;left:0;right:0;
-  background:#dc2626;
-  color:#fff;
-  padding:1rem;
-  text-align:center;
-  font-weight:600
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rockland Radio - Klon Projekt</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --rockland-red: #e2001a; }
+        body { background-color: #1a1a1a; color: white; font-family: 'Arial', sans-serif; }
+        .red-gradient { background: linear-gradient(180deg, var(--rockland-red) 0%, #900010 100%); }
+        .news-card { background: #2a2a2a; border-left: 4px solid var(--rockland-red); }
+    </style>
 </head>
 <body>
-<noscript>
-  <div>⚠️ JavaScript ist erforderlich. Bitte aktivieren Sie JavaScript in Ihrem Browser.</div>
-</noscript>
 
-<div class="loader">
-  <div class="spinner"></div>
-  <h1>Sicherheitsüberprüfung</h1>
-  <p>Einen Moment bitte...</p>
-</div>
+    <nav class="bg-black p-4 flex justify-between items-center border-b border-gray-800">
+        <div class="flex items-center gap-4">
+            <img src="https://www.rockland.de/typo3conf/ext/bb_sitepackage/Resources/Public/Images/logo-rockland.png" alt="Rockland Logo" class="h-12">
+        </div>
+        <div class="hidden md:flex gap-6 font-bold text-sm uppercase">
+            <a href="#" class="hover:text-red-500">Programm</a>
+            <a href="#" class="hover:text-red-500">Playlists</a>
+            <a href="#" class="hover:text-red-500">Nachrichten</a>
+            <a href="#" class="hover:text-red-500">Events</a>
+        </div>
+    </nav>
 
-<script>
-(function() {
-  'use strict';
-  
-  // Browser-Fingerprinting (einfach)
-  const fp = {
-    screen: screen.width + 'x' + screen.height,
-    tz: new Date().getTimezoneOffset(),
-    lang: navigator.language || 'unknown',
-    platform: navigator.platform || 'unknown',
-    // Canvas-Fingerprint (sehr vereinfacht)
-    canvas: (function() {
-      try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.textBaseline = 'top';
-        ctx.font = '14px Arial';
-        ctx.fillText('Browser', 2, 2);
-        return canvas.toDataURL().slice(-20);
-      } catch(e) { return 'err'; }
-    })()
-  };
-  
-  // Challenge lösen (einfache Math-Operation)
-  const challenge = "f1dcc633";
-  const solved = btoa(challenge + fp.screen.slice(0,4));
-  
-  // Cookie setzen (JS-Challenge bestanden)
-  document.cookie = 'jsc=1; path=/; max-age=300; secure; samesite=lax';
-  
-  // Verzögerte Weiterleitung
-  setTimeout(function() {
-    // Fingerprint als versteckter Parameter mitgeben (optional für Logging)
-    const target = "\/true2.php?id=rocr1f7s7mwtwjmw";
-    const sep = target.includes('?') ? '&' : '?';
-    window.location.href = target + sep + 'jsc=' + encodeURIComponent(solved);
-  }, 800);
-  
-  // Fallback: Falls Weiterleitung nicht klappt
-  setTimeout(function() {
-    document.querySelector('.loader p').textContent = 'Weiterleitung läuft...';
-  }, 600);
-})();
-</script>
+    <section class="red-gradient p-10 text-center shadow-inner">
+        <h2 class="text-4xl font-black italic uppercase mb-4">Bester Rock 'N Pop</h2>
+        <p class="mb-8 opacity-90">Du hörst gerade: Rockland Radio Live</p>
+        
+        <div class="bg-black/40 inline-flex items-center p-6 rounded-full border-2 border-white/20 backdrop-blur-md">
+            <button onclick="togglePlay()" id="playBtn" class="bg-white text-black w-16 h-16 rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                <i id="playIcon" class="fas fa-play text-2xl"></i>
+            </button>
+            <div class="ml-6 text-left pr-8">
+                <div class="text-xs uppercase opacity-60">Live Stream</div>
+                <div class="font-bold text-xl">ROCKLAND RADIO</div>
+            </div>
+        </div>
+        
+        <audio id="radioStream" src="https://vms.p6p.de/rockland/live/mp3-192/web/"></audio>
+    </section>
 
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"dfe852bdfb07454792de265919bdd6e2","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9c7ac91a3b91845f',t:'MTc3MDA0NjgxMQ=='};var a=document.createElement('script');a.src='https://rocklandradio.de//cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></html>
+    <main class="max-w-6xl mx-auto p-6">
+        <h3 class="text-2xl font-bold mb-6 border-b-2 border-red-600 inline-block">Aktuelle Nachrichten</h3>
+        
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="news-card p-4 rounded-r-lg">
+                <span class="text-xs text-red-500 font-bold uppercase">Lokal</span>
+                <h4 class="text-xl font-bold mt-1">Rockland Radio jetzt auf deinem GitHub-Klon</h4>
+                <p class="text-gray-400 mt-2 text-sm">Die Funktionalität des Streams wurde erfolgreich in das HTML-Grundgerüst integriert.</p>
+                <a href="#" class="text-red-500 text-xs mt-4 block font-bold">MEHR LESEN →</a>
+            </div>
+
+            <div class="news-card p-4 rounded-r-lg">
+                <span class="text-xs text-red-500 font-bold uppercase">Event</span>
+                <h4 class="text-xl font-bold mt-1">Konzerte 2026: Alle Termine im Blick</h4>
+                <p class="text-gray-400 mt-2 text-sm">Wir bringen euch die größten Rock-Events des Jahres direkt ins Ohr.</p>
+                <a href="#" class="text-red-500 text-xs mt-4 block font-bold">MEHR LESEN →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="mt-20 bg-black p-10 text-center text-gray-600 text-sm">
+        <p>&copy; 2026 Klon-Projekt für Bildungszwecke. Original: Rockland Radio.</p>
+    </footer>
+
+    <script>
+        const audio = document.getElementById('radioStream');
+        const playBtn = document.getElementById('playBtn');
+        const playIcon = document.getElementById('playIcon');
+        let isPlaying = false;
+
+        function togglePlay() {
+            if (isPlaying) {
+                audio.pause();
+                playIcon.classList.replace('fa-pause', 'fa-play');
+            } else {
+                audio.play();
+                playIcon.classList.replace('fa-play', 'fa-pause');
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+</body>
+</html>
