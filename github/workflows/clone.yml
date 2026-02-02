@@ -1,0 +1,37 @@
+name: Remote Site Cloner
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'URL der Seite die geklont werden soll'
+        required: true
+        default: 'https://www.rocklandradio.de'
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install SingleFile CLI
+        run: npm install -g "single-file-cli"
+
+      - name: Clone Website
+        run: |
+          mkdir -p clones
+          # Dieser Befehl nutzt einen echten Headless Chrome auf den GitHub Servern
+          single-file "${{ github.event.inputs.target_url }}" ./clones/index.html
+
+      - name: Commit and Push
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add .
+          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt"
+          git push
