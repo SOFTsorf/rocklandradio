@@ -4,28 +4,32 @@ const path = require('path');
 
 const url = process.argv[2];
 if (!url) {
-    console.error('❌ Fehler: Keine URL übergeben!');
+    console.error('❌ Keine URL angegeben');
     process.exit(1);
 }
 
 const domain = new URL(url).hostname;
 const outputDir = path.resolve(__dirname, 'clones', domain);
 
-console.log(`🚀 Starte Klonen von: ${url}`);
+async function startClone() {
+    try {
+        await scrape({
+            urls: [url],
+            directory: outputDir,
+            plugins: [
+                new PuppeteerPlugin({
+                    launchOptions: { 
+                        args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+                    },
+                    scrollToBottom: { timeout: 10000, viewportN: 5 }
+                })
+            ]
+        });
+        console.log("✅ Klonen erfolgreich abgeschlossen!");
+    } catch (err) {
+        console.error("❌ Fehler beim Klonen:", err);
+        process.exit(1);
+    }
+}
 
-scrape({
-    urls: [url],
-    directory: outputDir,
-    plugins: [
-        new PuppeteerPlugin({
-            launchOptions: { 
-                args: ['--no-sandbox', '--disable-setuid-sandbox'] 
-            }
-        })
-    ]
-}).then(() => {
-    console.log("✅ Klonen erfolgreich abgeschlossen!");
-}).catch((err) => {
-    console.error("❌ CRITICAL ERROR:", err);
-    process.exit(1);
-});
+startClone();
