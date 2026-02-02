@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Setup Environment
+      - name: Setup Tools
         run: |
           rm -f package.json package-lock.json
           npm install website-scraper website-scraper-puppeteer puppeteer
@@ -27,7 +27,7 @@ jobs:
       - name: Run Cloner
         run: node scraper.js "${{ github.event.inputs.target_url }}"
 
-      - name: Save Results
+      - name: Save to Repo
         run: |
           git config --global user.name "CloneBot"
           git config --global user.email "bot@github.com"
