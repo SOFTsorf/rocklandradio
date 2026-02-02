@@ -14,20 +14,25 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Install
+
+      - name: Install Tools
         run: |
+          # Wir installieren die Pakete ohne feste Versionsnummer, um ETARGET Fehler zu vermeiden
           npm install website-scraper website-scraper-puppeteer puppeteer
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
-      - name: Run
+
+      - name: Run Cloner
         run: node scraper.js "${{ github.event.inputs.target_url }}"
-      - name: Save
+
+      - name: Save Results
         run: |
-          git config --global user.name "Bot"
+          git config --global user.name "CloneBot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Klon fertig" || echo "Nichts neu"
+          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt" || echo "Keine Änderungen"
           git push
