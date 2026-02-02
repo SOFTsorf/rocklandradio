@@ -5,14 +5,13 @@ const fs = require('fs');
 
 const url = process.argv[2];
 if (!url) {
-    console.error('Keine URL gefunden!');
+    console.error('Keine URL angegeben!');
     process.exit(1);
 }
 
 const domain = new URL(url).hostname.replace('www.', '');
 const outputDir = path.resolve(__dirname, 'clones', domain);
 
-// Falls der Ordner schon existiert, löschen (für frischen Klon)
 if (fs.existsSync(outputDir)) {
     fs.rmSync(outputDir, { recursive: true });
 }
@@ -37,7 +36,7 @@ scrape({
         {directory: 'css', extensions: ['.css']}
     ]
 }).then(() => {
-    console.log(`✅ Fertig! Alle Dateien von ${domain} wurden gespeichert.`);
+    console.log(`✅ Erfolg: ${domain} wurde geklont.`);
 }).catch((err) => {
     console.error("❌ Fehler:", err);
     process.exit(1);
