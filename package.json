@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "website-scraper": "^5.3.1",
+    "website-scraper-puppeteer": "^0.2.0",
+    "puppeteer": "^21.0.0"
+  }
+}
