@@ -19,14 +19,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Tools
+      - name: Setup Environment
         run: |
-          # Wir löschen eine eventuell kaputte package.json im Arbeitsverzeichnis
-          rm -f package.json
-          # Wir installieren alles frisch ohne Versionsvorgabe
+          rm -f package.json package-lock.json
           npm install website-scraper website-scraper-puppeteer puppeteer
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
 
       - name: Run Cloner
         run: node scraper.js "${{ github.event.inputs.target_url }}"
@@ -36,5 +32,5 @@ jobs:
           git config --global user.name "CloneBot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt" || echo "Nichts neu"
+          git commit -m "Klon von ${{ github.event.inputs.target_url }} erstellt" || echo "Keine Änderungen"
           git push
