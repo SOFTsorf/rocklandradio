@@ -3,37 +3,31 @@ on:
   workflow_dispatch:
     inputs:
       target_url:
-        description: 'URL zum Klonen (z.B. https://www.rocklandradio.de)'
+        description: 'URL zum Klonen'
         required: true
         default: 'https://www.rocklandradio.de'
 
 jobs:
-  clone_job:
+  clone:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - name: Code laden
-        uses: actions/checkout@v4
-
-      - name: Node installieren
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-
-      - name: Abhängigkeiten installieren
+      - name: Install
         run: |
           npm install website-scraper website-scraper-puppeteer puppeteer
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
-
-      - name: Webseite spiegeln
+      - name: Run
         run: node scraper.js "${{ github.event.inputs.target_url }}"
-
-      - name: Dateien speichern
+      - name: Push
         run: |
-          git config --global user.name "GithubBot"
+          git config --global user.name "Bot"
           git config --global user.email "bot@github.com"
           git add .
-          git commit -m "Klon abgeschlossen: ${{ github.event.inputs.target_url }}" || echo "Keine Änderungen"
+          git commit -m "Klon fertig" || echo "Keine Änderungen"
           git push
