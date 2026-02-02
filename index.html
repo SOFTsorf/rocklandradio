@@ -3,282 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROCKLAND.DE | BESTER ROCK 'N POP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <title>Ultimate Web Cloner Pro</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        :root {
-            --rockland-yellow: #f5b324;
-            --rockland-dark: #121212;
-            --rockland-gray: #1e1e1e;
-            --text-light: #ffffff;
-            --text-dim: #b3b3b3;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            background-color: var(--rockland-dark);
-            color: var(--text-light);
-            font-family: 'Open Sans', sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* NAVIGATION & HEADER */
-        header {
-            background: #000;
-            height: 70px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 2px solid var(--rockland-yellow);
-        }
-
-        .logo img {
-            height: 50px;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 20px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        /* HERO SECTION */
-        .hero {
-            position: relative;
-            height: 60vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-                        url('https://www.rockland.de/fileadmin/_processed_/d/7/csm_Mythen_Rockgeschichte_Header_f8e8e8e8e8.jpg');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
             text-align: center;
         }
-
-        .hero-content h1 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 3.5rem;
-            text-shadow: 3px 3px 10px rgba(0,0,0,0.8);
-            text-transform: uppercase;
+        h1 { margin-bottom: 1.5rem; color: #38bdf8; }
+        input {
+            width: 80%;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            margin-bottom: 1rem;
         }
-
-        /* CONTENT AREAS */
-        .main-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .section-title {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 2rem;
-            color: var(--rockland-yellow);
-            margin-bottom: 30px;
-            text-transform: uppercase;
-            border-left: 5px solid var(--rockland-yellow);
-            padding-left: 15px;
-        }
-
-        /* PODCAST GRID */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-
-        .card {
-            background: var(--rockland-gray);
-            border-radius: 5px;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            cursor: pointer;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-        }
-
-        .card img {
-            width: 100%;
-            aspect-ratio: 1/1;
-            object-fit: cover;
-        }
-
-        .card-body {
-            padding: 20px;
-        }
-
-        .card-body h3 {
-            font-family: 'Montserrat', sans-serif;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-            color: var(--text-light);
-        }
-
-        .card-body p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-            margin-bottom: 15px;
-        }
-
-        .btn-more {
-            color: var(--rockland-yellow);
-            text-decoration: none;
+        button {
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
             font-weight: bold;
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
         }
-
-        /* PLAYER BAR (FIXED) */
-        .footer-player {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background: #000;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            border-top: 1px solid #333;
-            z-index: 2000;
-        }
-
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .play-btn {
-            width: 50px;
-            height: 50px;
-            background: var(--rockland-yellow);
+        button:hover { background-color: #0ea5e9; }
+        #status { margin-top: 1rem; font-size: 0.9rem; color: #94a3b8; }
+        .loader {
+            display: none;
+            margin: 10px auto;
+            border: 4px solid #334155;
+            border-top: 4px solid #38bdf8;
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: black;
-            font-size: 1.5rem;
-            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
         }
-
-        .now-playing {
-            margin-left: 20px;
-        }
-
-        .now-playing .artist {
-            display: block;
-            color: var(--rockland-yellow);
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .now-playing .song {
-            display: block;
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        @media (max-width: 768px) {
-            header nav { display: none; }
-            .hero-content h1 { font-size: 2rem; }
-        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">
-            <img src="https://www.rockland.de/typo3conf/ext/site_package/Resources/Public/Images/Logo.png" alt="Rockland Logo">
-        </div>
-        <nav>
-            <ul>
-                <li><a href="#">Programm</a></li>
-                <li><a href="#">Musik</a></li>
-                <li><a href="#">Podcasts</a></li>
-                <li><a href="#">Events</a></li>
-            </ul>
-        </nav>
-    </header>
+<div class="container">
+    <h1>Web Cloner</h1>
+    <p>Geben Sie die URL ein, um das Frontend zu klonen:</p>
+    <input type="url" id="urlInput" placeholder="https://beispiel.de" required>
+    <br>
+    <button onclick="cloneWebsite()">Seite klonen & Download</button>
+    <div class="loader" id="loader"></div>
+    <div id="status">Bereit zum Kopieren...</div>
+</div>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Bester Rock 'n Pop</h1>
-        </div>
-    </section>
+<script>
+    async function cloneWebsite() {
+        const url = document.getElementById('urlInput').value;
+        const status = document.getElementById('status');
+        const loader = document.getElementById('loader');
 
-    <main class="main-content">
-        <h2 class="section-title">Aktuelle Podcasts</h2>
-        
-        <div class="grid">
-            <div class="card">
-                <img src="https://www.rockland.de/fileadmin/_processed_/5/7/csm_Mythen_Rockgeschichte_800x800_b200676449.jpg" alt="Mythen">
-                <div class="card-body">
-                    <h3>Mythen der Rockgeschichte</h3>
-                    <p>Die größten Legenden des Rock unter der Lupe.</p>
-                    <a href="#" class="btn-more">Jetzt reinhören ➤</a>
-                </div>
-            </div>
+        if (!url) {
+            alert("Bitte eine gültige URL eingeben!");
+            return;
+        }
 
-            <div class="card">
-                <img src="https://www.rockland.de/fileadmin/_processed_/3/a/csm_Podcast_Annette_Radueg_300x300_7335272a91.jpg" alt="Annette">
-                <div class="card-body">
-                    <h3>Menschen bei Annette Radüg</h3>
-                    <p>Spannende Interviews mit interessanten Gästen.</p>
-                    <a href="#" class="btn-more">Jetzt reinhören ➤</a>
-                </div>
-            </div>
+        status.innerText = "Verbindung wird aufgebaut...";
+        loader.style.display = "block";
 
-            <div class="card">
-                <img src="https://www.rockland.de/fileadmin/_processed_/d/7/csm_mdw_600_83d6a89347.jpg" alt="Woche">
-                <div class="card-body">
-                    <h3>Menschen der Woche</h3>
-                    <p>Wer hat diese Woche Schlagzeilen gemacht?</p>
-                    <a href="#" class="btn-more">Jetzt reinhören ➤</a>
-                </div>
-            </div>
+        try {
+            // Wir nutzen AllOrigins als Proxy, um CORS-Sperren zu umgehen
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+            const response = await fetch(proxyUrl);
+            const data = await response.json();
 
-            <div class="card">
-                <img src="https://www.rockland.de/fileadmin/_processed_/1/d/csm_Ollis_kleine_Uebersetzungshilfe_600x600_8422e11883.jpg" alt="Olli">
-                <div class="card-body">
-                    <h3>Ollis Übersetzungshilfe</h3>
-                    <p>Was singen die da eigentlich? Olli erklärt es.</p>
-                    <a href="#" class="btn-more">Jetzt reinhören ➤</a>
-                </div>
-            </div>
-        </div>
-    </main>
+            if (!data.contents) throw new Error("Inhalt konnte nicht geladen werden.");
 
-    <footer class="footer-player">
-        <div class="player-controls">
-            <div class="play-btn">▶</div>
-        </div>
-        <div class="now-playing">
-            <span class="artist">LIVE ON AIR</span>
-            <span class="song">ROCKLAND RADIO - MAINZ</span>
-        </div>
-    </footer>
+            status.innerText = "HTML extrahiert. Erstelle ZIP-Archiv...";
+
+            // ZIP-Datei erstellen
+            const zip = new JSZip();
+            zip.file("index.html", data.contents);
+            
+            // Info-Datei hinzufügen
+            zip.file("readme.txt", "Geklont mit Web Cloner Pro\nUrsprüngliche URL: " + url);
+
+            const content = await zip.generateAsync({type:"blob"});
+            const downloadLink = document.createElement("a");
+            downloadLink.href = URL.createObjectURL(content);
+            downloadLink.download = "website_clone.zip";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+
+            status.innerText = "Erfolgreich geklont! Checke deine Downloads.";
+        } catch (error) {
+            status.innerText = "Fehler: " + error.message;
+            console.error(error);
+        } finally {
+            loader.style.display = "none";
+        }
+    }
+</script>
 
 </body>
 </html>
