@@ -3,78 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rockland Radio - Klon Projekt</title>
+    <title>Rockland Radio - Klon</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --rockland-red: #e2001a; }
-        body { background-color: #1a1a1a; color: white; font-family: 'Arial', sans-serif; }
-        .red-gradient { background: linear-gradient(180deg, var(--rockland-red) 0%, #900010 100%); }
-        .news-card { background: #2a2a2a; border-left: 4px solid var(--rockland-red); }
+        :root {
+            --rockland-yellow: #fde047; /* Gelb-Ton aus dem Logo */
+            --rockland-dark: #121212;
+            --rockland-card: #1e1e1e;
+        }
+        body { background-color: var(--rockland-dark); color: white; }
+        .yellow-text { color: var(--rockland-yellow); }
+        .yellow-bg { background-color: var(--rockland-yellow); }
+        .border-yellow { border-color: var(--rockland-yellow); }
+        
+        /* News Overlay Effekt */
+        .news-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #121212; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
     </style>
 </head>
-<body>
+<body class="font-sans pb-24">
 
-    <nav class="bg-black p-4 flex justify-between items-center border-b border-gray-800">
-        <div class="flex items-center gap-4">
-            <img src="https://www.rockland.de/typo3conf/ext/bb_sitepackage/Resources/Public/Images/logo-rockland.png" alt="Rockland Logo" class="h-12">
-        </div>
-        <div class="hidden md:flex gap-6 font-bold text-sm uppercase">
-            <a href="#" class="hover:text-red-500">Programm</a>
-            <a href="#" class="hover:text-red-500">Playlists</a>
-            <a href="#" class="hover:text-red-500">Nachrichten</a>
-            <a href="#" class="hover:text-red-500">Events</a>
-        </div>
-    </nav>
+    <header class="p-4 flex justify-between items-center sticky top-0 bg-black z-50 border-b border-gray-800">
+        <img src="https://www.rockland.de/typo3conf/ext/bb_sitepackage/Resources/Public/Images/logo-rockland.png" alt="Rockland Logo" class="h-10">
+        <button class="text-white text-2xl"><i class="fas fa-bars"></i></button>
+    </header>
 
-    <section class="red-gradient p-10 text-center shadow-inner">
-        <h2 class="text-4xl font-black italic uppercase mb-4">Bester Rock 'N Pop</h2>
-        <p class="mb-8 opacity-90">Du hörst gerade: Rockland Radio Live</p>
-        
-        <div class="bg-black/40 inline-flex items-center p-6 rounded-full border-2 border-white/20 backdrop-blur-md">
-            <button onclick="togglePlay()" id="playBtn" class="bg-white text-black w-16 h-16 rounded-full flex items-center justify-center hover:scale-110 transition-transform">
-                <i id="playIcon" class="fas fa-play text-2xl"></i>
-            </button>
-            <div class="ml-6 text-left pr-8">
-                <div class="text-xs uppercase opacity-60">Live Stream</div>
-                <div class="font-bold text-xl">ROCKLAND RADIO</div>
-            </div>
+    <section class="relative w-full h-[400px] bg-cover bg-center" style="background-image: url('https://www.rockland.de/fileadmin/_processed_/b/8/csm_Rockland_Bestenliste_2024_Header_Web_8e5e8e8e8e.jpg');">
+        <div class="news-overlay absolute inset-0 flex flex-col justify-end p-6">
+            <h2 class="text-3xl font-bold leading-tight">Die Rockland Bestenliste – Das Original!</h2>
+            <p class="text-sm mt-2 opacity-80">Ab dem 15. Januar auf Rockland Radio.</p>
         </div>
-        
-        <audio id="radioStream" src="https://vms.p6p.de/rockland/live/mp3-192/web/"></audio>
     </section>
 
-    <main class="max-w-6xl mx-auto p-6">
-        <h3 class="text-2xl font-bold mb-6 border-b-2 border-red-600 inline-block">Aktuelle Nachrichten</h3>
-        
-        <div class="grid md:grid-cols-2 gap-6">
-            <div class="news-card p-4 rounded-r-lg">
-                <span class="text-xs text-red-500 font-bold uppercase">Lokal</span>
-                <h4 class="text-xl font-bold mt-1">Rockland Radio jetzt auf deinem GitHub-Klon</h4>
-                <p class="text-gray-400 mt-2 text-sm">Die Funktionalität des Streams wurde erfolgreich in das HTML-Grundgerüst integriert.</p>
-                <a href="#" class="text-red-500 text-xs mt-4 block font-bold">MEHR LESEN →</a>
-            </div>
+    <div class="grid grid-cols-2 gap-2 p-4 bg-gray-900">
+        <button class="bg-gray-800 p-3 rounded flex items-center justify-center gap-2 text-sm">
+            <i class="fas fa-phone yellow-text"></i> +49 800 5900
+        </button>
+        <button class="bg-emerald-600 p-3 rounded flex items-center justify-center gap-2 text-sm font-bold">
+            <i class="fab fa-whatsapp"></i> WHATSAPP
+        </button>
+        <button class="bg-gray-800 p-3 rounded flex items-center justify-center gap-2 text-sm">
+            <i class="fas fa-envelope yellow-text"></i> E-MAIL
+        </button>
+        <button class="bg-gray-800 p-3 rounded flex items-center justify-center gap-2 text-sm">
+            <i class="fas fa-info-circle yellow-text"></i> SERVICE
+        </button>
+    </div>
 
-            <div class="news-card p-4 rounded-r-lg">
-                <span class="text-xs text-red-500 font-bold uppercase">Event</span>
-                <h4 class="text-xl font-bold mt-1">Konzerte 2026: Alle Termine im Blick</h4>
-                <p class="text-gray-400 mt-2 text-sm">Wir bringen euch die größten Rock-Events des Jahres direkt ins Ohr.</p>
-                <a href="#" class="text-red-500 text-xs mt-4 block font-bold">MEHR LESEN →</a>
+    <section class="p-4">
+        <h3 class="text-2xl font-black uppercase italic mb-1">Rock 'N Pop News</h3>
+        <p class="text-xs text-gray-500 mb-6">Hier erfahrt ihr alles Neue aus der Welt des Rock.</p>
+
+        <div class="space-y-4">
+            <div class="relative rounded-lg overflow-hidden h-64 shadow-lg">
+                <img src="https://picsum.photos/seed/rock1/600/400" class="w-full h-full object-cover">
+                <div class="news-overlay absolute inset-0 p-4 flex flex-col justify-end">
+                    <h4 class="font-bold text-lg">Tom Knaufle von Die Aerzte äußert sich zu Musikmarkt...</h4>
+                </div>
+            </div>
+            <div class="relative rounded-lg overflow-hidden h-64 shadow-lg">
+                <img src="https://picsum.photos/seed/rock2/600/400" class="w-full h-full object-cover border-l-4 border-yellow">
+                <div class="news-overlay absolute inset-0 p-4 flex flex-col justify-end">
+                    <h4 class="font-bold text-lg text-yellow-400">Iron Maiden bringen neue Tour nach Deutschland!</h4>
+                </div>
             </div>
         </div>
-    </main>
+        <div class="text-center mt-6 border-b border-gray-800 pb-6">
+            <button class="text-xs font-bold tracking-widest uppercase text-gray-400">Alle News ansehen <i class="fas fa-chevron-right ml-1"></i></button>
+        </div>
+    </section>
 
-    <footer class="mt-20 bg-black p-10 text-center text-gray-600 text-sm">
-        <p>&copy; 2026 Klon-Projekt für Bildungszwecke. Original: Rockland Radio.</p>
-    </footer>
+    <section class="p-4 bg-[#161616]">
+        <h3 class="text-2xl font-black uppercase italic mb-4">Regionalnachrichten</h3>
+        
+        <div class="space-y-6">
+            <div class="flex gap-4 items-center border-b border-gray-800 pb-4">
+                <img src="https://www.rockland.de/fileadmin/templates/images/wappen/wappen_rlp.png" alt="RLP" class="w-12 h-12 object-contain">
+                <div class="flex-1">
+                    <h5 class="font-bold text-sm">Mainz / Rheinhessen</h5>
+                    <p class="text-xs text-gray-500">Nachrichten aus deiner Region.</p>
+                </div>
+                <button class="bg-gray-800 px-3 py-1 rounded text-[10px] font-bold uppercase">Mehr lesen</button>
+            </div>
+            <div class="flex gap-4 items-center border-b border-gray-800 pb-4">
+                <img src="https://www.rockland.de/fileadmin/templates/images/wappen/wappen_koblenz.png" alt="Koblenz" class="w-12 h-12 object-contain">
+                <div class="flex-1">
+                    <h5 class="font-bold text-sm">Koblenz</h5>
+                    <p class="text-xs text-gray-500">Was passiert am Deutschen Eck?</p>
+                </div>
+                <button class="bg-gray-800 px-3 py-1 rounded text-[10px] font-bold uppercase">Mehr lesen</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="fixed bottom-0 left-0 right-0 bg-black border-t border-yellow p-3 flex items-center justify-between z-[100]">
+        <div class="flex items-center gap-3">
+            <div class="relative">
+                <button onclick="toggleStream()" id="playBtn" class="w-12 h-12 yellow-bg text-black rounded-full flex items-center justify-center">
+                    <i id="playIcon" class="fas fa-play text-xl"></i>
+                </button>
+            </div>
+            <div>
+                <p class="text-[10px] uppercase yellow-text font-bold leading-none">Live Stream</p>
+                <p class="text-sm font-bold leading-tight">ROCKLAND RADIO</p>
+            </div>
+        </div>
+        <div class="flex gap-4 text-xl pr-2">
+            <i class="fas fa-heart text-gray-600"></i>
+            <i class="fas fa-volume-up text-gray-400"></i>
+        </div>
+    </div>
+
+    <audio id="mainStream" src="https://vms.p6p.de/rockland/live/mp3-192/web/"></audio>
 
     <script>
-        const audio = document.getElementById('radioStream');
-        const playBtn = document.getElementById('playBtn');
+        const audio = document.getElementById('mainStream');
         const playIcon = document.getElementById('playIcon');
         let isPlaying = false;
 
-        function togglePlay() {
+        function toggleStream() {
             if (isPlaying) {
                 audio.pause();
                 playIcon.classList.replace('fa-pause', 'fa-play');
