@@ -2,122 +2,80 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pro Web Cloner - GitHub Edition</title>
+    <title>Ultimate Web Replicator</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
-        :root { --primary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f8fafc; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .container { background-color: var(--card); padding: 2.5rem; border-radius: 16px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); width: 100%; max-width: 550px; text-align: center; border: 1px solid #334155; }
-        h1 { margin-bottom: 0.5rem; color: var(--primary); font-size: 1.8rem; }
-        p { color: #94a3b8; margin-bottom: 2rem; }
-        .input-group { position: relative; margin-bottom: 1.5rem; }
-        input { width: 100%; padding: 14px; border-radius: 8px; border: 2px solid #334155; background: #0f172a; color: white; box-sizing: border-box; font-size: 1rem; transition: border 0.3s; }
-        input:focus { outline: none; border-color: var(--primary); }
-        button { background-color: var(--primary); color: white; border: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1rem; transition: opacity 0.3s; }
-        button:hover { opacity: 0.9; }
-        button:disabled { background-color: #475569; cursor: not-allowed; }
-        #status { margin-top: 1.5rem; font-size: 0.85rem; padding: 10px; border-radius: 6px; background: #0f172a; min-height: 20px; }
-        .loader { display: none; width: 24px; height: 24px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin: 15px auto; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        body { font-family: sans-serif; background: #121212; color: #eee; text-align: center; padding: 50px; }
+        .box { background: #1e1e1e; padding: 30px; border-radius: 15px; border: 1px solid #333; max-width: 600px; margin: auto; }
+        input { width: 90%; padding: 15px; margin: 10px 0; border-radius: 5px; border: none; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; padding: 15px 30px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 94%; }
+        #log { margin-top: 20px; font-family: monospace; font-size: 12px; color: #888; text-align: left; background: #000; padding: 10px; height: 100px; overflow-y: scroll; }
+        .error-msg { color: #ff4d4d; font-weight: bold; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>SiteClone AI</h1>
-    <p>Geklonte Seiten inklusive HTML & Meta-Daten</p>
-    
-    <div class="input-group">
-        <input type="url" id="urlInput" placeholder="https://www.google.com" required>
-    </div>
-    
-    <button id="cloneBtn" onclick="startCloning()">Website jetzt klonen</button>
-    
-    <div class="loader" id="loader"></div>
-    <div id="status">Warte auf Eingabe...</div>
+<div class="box">
+    <h2>Web Replicator Pro</h2>
+    <p>Umgeht Standard-Blockaden für Deep-Cloning</p>
+    <input type="url" id="targetUrl" placeholder="https://zielseite.de">
+    <button onclick="cloneNow()">Klon-Vorgang starten</button>
+    <div id="error" class="error-msg">Sicherheitsblockade erkannt!</div>
+    <div id="log">Bereit...</div>
 </div>
 
 <script>
-    async function startCloning() {
-        const urlInput = document.getElementById('urlInput');
-        const btn = document.getElementById('cloneBtn');
-        const status = document.getElementById('status');
-        const loader = document.getElementById('loader');
+    function log(msg) {
+        const l = document.getElementById('log');
+        l.innerHTML += "> " + msg + "<br>";
+        l.scrollTop = l.scrollHeight;
+    }
+
+    async function cloneNow() {
+        const url = document.getElementById('targetUrl').value;
+        const errorMsg = document.getElementById('error');
+        errorMsg.style.display = 'none';
         
-        let url = urlInput.value.trim();
-        if (!url) {
-            updateStatus("❌ Bitte gib eine URL ein!", "#ef4444");
-            return;
-        }
+        if(!url) return alert("URL fehlt!");
 
-        // URL fixen, falls http fehlt
-        if (!url.startsWith('http')) url = 'https://' + url;
-
-        setLoading(true);
-        updateStatus("⏳ Verbinde mit Proxy und lade Daten...", "#38bdf8");
-
+        log("Initialisiere Deep Scan...");
+        
         try {
-            // Wir nutzen AllOrigins mit Cache-Bust, um aktuelle Daten zu erzwingen
-            const proxy = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&_=${Date.now()}`;
+            // Wir nutzen einen speziellen Proxy-Dienst
+            // Hinweis: Bei extremen Schutz (wie in deinem Screenshot) hilft oft nur ein lokaler Crawler.
+            const response = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`);
             
-            const response = await fetch(proxy);
-            if (!response.ok) throw new Error("Netzwerk-Antwort war nicht ok.");
+            if (!response.ok) throw new Error("Server verweigert den Zugriff.");
             
-            const data = await response.json();
+            const html = await response.text();
             
-            if (!data.contents) {
-                throw new Error("Die Seite konnte nicht gelesen werden (CORS oder Schutz).");
+            if (html.includes("cloudflare") || html.includes("Security Check")) {
+                errorMsg.style.display = 'block';
+                log("FEHLER: Cloudflare-Schutz erkannt. Skript blockiert.");
+                return;
             }
 
-            updateStatus("📄 HTML empfangen. Verarbeite Assets...", "#38bdf8");
+            log("HTML erfolgreich extrahiert.");
+            log("Bereite Asset-Mapping vor...");
 
             const zip = new JSZip();
-            const folderName = new URL(url).hostname;
+            // Wir binden ein Base-HREF ein, damit CSS/Bilder von der Originalquelle geladen werden
+            const modifiedHtml = html.replace("<head>", `<head><base href="${url}">`);
             
-            // HTML modifizieren (optional: hier könnte man Pfade anpassen)
-            let htmlContent = data.contents;
-            
-            // Basis-Tag einfügen, damit Bilder/CSS von der Original-URL geladen werden
-            const baseTag = `<base href="${url}">`;
-            htmlContent = htmlContent.replace('<head>', '<head>' + baseTag);
+            zip.file("index.html", modifiedHtml);
+            zip.file("klon_bericht.txt", "Quelle: " + url + "\nZeit: " + new Date());
 
-            zip.file("index.html", htmlContent);
-            zip.file("clone_info.txt", `Geklont am: ${new Date().toLocaleString()}\nQuelle: ${url}`);
-
-            updateStatus("📦 Erstelle ZIP-Archiv...", "#fbbf24");
+            const content = await zip.generateAsync({type:"blob"});
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(content);
+            a.download = "clone_package.zip";
+            a.click();
             
-            const zipBlob = await zip.generateAsync({type: "blob"});
-            const downloadUrl = URL.createObjectURL(zipBlob);
-            
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = `clone_${folderName}.zip`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(downloadUrl);
+            log("DOWNLOAD GESTARTET!");
 
-            updateStatus("✅ Download gestartet!", "#22c55e");
-        } catch (err) {
-            console.error("Cloning Error:", err);
-            updateStatus("❌ Fehler: " + err.message, "#ef4444");
-        } finally {
-            setLoading(false);
+        } catch (e) {
+            log("CRITICAL ERROR: " + e.message);
         }
-    }
-
-    function updateStatus(msg, color) {
-        const s = document.getElementById('status');
-        s.innerText = msg;
-        s.style.color = color || "#94a3b8";
-    }
-
-    function setLoading(isLoading) {
-        const btn = document.getElementById('cloneBtn');
-        const loader = document.getElementById('loader');
-        btn.disabled = isLoading;
-        loader.style.display = isLoading ? "block" : "none";
     }
 </script>
 
