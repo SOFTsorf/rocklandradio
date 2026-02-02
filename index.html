@@ -3,57 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiteClone Pro - Dashboard</title>
+    <title>Deep Asset Cloner Pro</title>
     <style>
-        :root { --bg: #0f172a; --primary: #38bdf8; --card: #1e293b; --text: #f1f5f9; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 800px; width: 100%; }
-        header { text-align: center; margin-bottom: 40px; border-bottom: 2px solid var(--card); padding-bottom: 20px; }
-        h1 { color: var(--primary); margin: 0; }
-        .step-card { background: var(--card); padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #334155; }
-        .step-num { background: var(--primary); color: var(--bg); width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; margin-right: 10px; }
-        .btn { display: inline-block; background: var(--primary); color: var(--bg); padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold; margin-top: 15px; transition: opacity 0.2s; }
-        .btn:hover { opacity: 0.9; }
-        code { background: #000; padding: 4px 8px; border-radius: 4px; color: #fbbf24; }
-        .folder-list { list-style: none; padding: 0; }
-        .folder-list li { background: #0f172a; padding: 10px; margin-top: 5px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #334155; }
-        .status-tag { font-size: 12px; color: #22c55e; border: 1px solid #22c55e; padding: 2px 6px; border-radius: 4px; }
+        :root { --primary: #4da3ff; --bg: #121212; --card: #1e1e1e; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 500px; background: var(--card); padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { font-size: 1.5rem; color: var(--primary); margin-bottom: 20px; text-align: center; }
+        
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: #bbb; }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #252525; color: white; box-sizing: border-box; }
+        
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
+        .btn-start { background: var(--primary); color: white; }
+        .btn-start:hover { background: #3a82d1; }
+        .btn-download { background: #28a745; color: white; display: none; text-align: center; text-decoration: none; }
+        
+        #status-box { margin-top: 20px; padding: 15px; border-radius: 8px; background: #252525; border-left: 4px solid #444; }
+        .status-active { border-left-color: #ffd700 !important; }
+        .status-success { border-left-color: #28a745 !important; }
+        
+        .loader { border: 3px solid #333; border-top: 3px solid var(--primary); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>SiteClone Dashboard</h1>
-        <p>GitHub Action-basierter Deep Crawler</p>
-    </header>
-
-    <div class="step-card">
-        <h3><span class="step-num">1</span> Klon-Vorgang starten</h3>
-        <p>Da Browser-Sicherheitschecks (Cloudflare) das direkte Kopieren blockieren, nutzt dieses Tool die <strong>GitHub Actions</strong> Kraft.</p>
-        <p>Gehe zum Tab <code>Actions</code> → <code>Deep Asset Cloner</code> → <code>Run workflow</code>.</p>
-        <a href="../../actions" class="btn">Zu den GitHub Actions</a>
+    <h1>🚀 Deep Crawler Control</h1>
+    
+    <div class="input-group">
+        <label>Ziel-Webseite (URL)</label>
+        <input type="text" id="targetUrl" placeholder="https://www.rockland.de">
     </div>
 
-    <div class="step-card">
-        <h3><span class="step-num">2</span> Deine geklonten Seiten</h3>
-        <p>Sobald der Bot fertig ist (grüner Haken in Actions), erscheinen die Seiten hier im Ordner <code>clones/</code>.</p>
-        <ul class="folder-list" id="cloneList">
-            <li>
-                <span>Beispiel: rocklandradio.de</span>
-                <span class="status-tag">In Arbeit / Bereit</span>
-            </li>
-        </ul>
-        <p style="font-size: 12px; color: #94a3b8; margin-top: 10px;">
-            Hinweis: Um die Klone online zu sehen, aktiviere <b>GitHub Pages</b> in den Einstellungen auf den <code>main</code> Branch.
-        </p>
+    <button class="btn btn-start" onclick="startCloning()">Klon-Vorgang starten</button>
+    
+    <div id="status-box" class="hidden">
+        <div id="status-text">
+            <span class="loader"></span> Starte GitHub Action...
+        </div>
     </div>
+
+    <a id="downloadBtn" href="#" target="_blank" class="btn btn-download">📦 Package herunterladen (.zip)</a>
+
+    <p style="font-size: 0.75rem; color: #666; margin-top: 20px; text-align: center;">
+        Hinweis: Du wirst zu GitHub weitergeleitet, um den Start zu bestätigen.
+    </p>
 </div>
 
 <script>
-    // Da wir auf GitHub sind, können wir nicht einfach Dateisysteme scannen, 
-    // aber wir können den User anleiten, wo er klicken muss.
-    console.log("Dashboard bereit. Warte auf GitHub Action Deployment.");
+    function startCloning() {
+        const url = document.getElementById('targetUrl').value;
+        if (!url || !url.startsWith('http')) {
+            alert('Bitte eine gültige URL eingeben (inkl. https://)');
+            return;
+        }
+
+        const statusBox = document.getElementById('status-box');
+        const statusText = document.getElementById('status-text');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        statusBox.classList.remove('hidden');
+        statusBox.classList.add('status-active');
+        
+        // Da wir kein Backend haben, leiten wir direkt zum "Run Workflow" Fenster weiter
+        // Das ist der sicherste Weg, damit du dich nicht mit API-Tokens rumschlagen musst
+        setTimeout(() => {
+            statusText.innerHTML = "✅ Weiterleitung zu GitHub...";
+            window.location.href = `https://github.com/SOFTsorf/rocklandradio/actions/workflows/deep-clone.yml`;
+        }, 1500);
+        
+        // Nach dem Start (manuell) findest du hier die ZIP
+        // Wir blenden den Button nach einer Verzögerung ein
+        setTimeout(() => {
+            downloadBtn.style.display = 'block';
+            downloadBtn.href = "https://github.com/SOFTsorf/rocklandradio/archive/refs/heads/main.zip";
+        }, 5000);
+    }
 </script>
 
 </body>
