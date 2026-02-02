@@ -1,8 +1,9 @@
-const scrape = require('website-scraper');
+const scrapeRaw = require('website-scraper');
 const PuppeteerPluginRaw = require('website-scraper-puppeteer');
 const path = require('path');
 
-// Fix für den "Constructor"-Fehler: Prüft, wo das Plugin steckt
+// Diese beiden Zeilen regeln das "not a function" und "not a constructor" Problem
+const scrape = scrapeRaw.default || scrapeRaw;
 const PuppeteerPlugin = PuppeteerPluginRaw.default || PuppeteerPluginRaw;
 
 const url = process.argv[2];
@@ -29,7 +30,7 @@ async function startClone() {
                 })
             ]
         });
-        console.log("✅ Klonen erfolgreich abgeschlossen!");
+        console.log("✅ ERFOLG! Seite wurde komplett kopiert.");
     } catch (err) {
         console.error("❌ Fehler beim Klonen:", err);
         process.exit(1);
